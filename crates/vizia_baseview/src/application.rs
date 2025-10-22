@@ -530,9 +530,9 @@ impl ApplicationRunner {
 
                     self.cx.needs_refresh(Entity::root());
 
-                    // Set scale factor to ONLY system DPI, not including user scale
-                    // User scale is handled by the physical window size change
-                    self.cx.set_scale_factor(self.window_scale_factor);
+                    self.cx.set_scale_factor(
+                        self.window_scale_factor * self.current_user_scale_factor,
+                    );
 
                     self.cx.send_event(Event::new(WindowEvent::WindowResized(WindowSize {
                         width: physical_size.0,
