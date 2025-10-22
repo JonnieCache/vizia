@@ -13,6 +13,12 @@ static DEFAULT_MODIFIER_SCALAR: f32 = 0.04;
 
 use std::{default, f32::consts::PI};
 
+pub enum KnobEvent {
+    DragStart,
+    DragMove(f32),
+    DragEnd,
+}
+
 /// A circular view which represents a value.
 pub struct Knob<L> {
     lens: L,
@@ -133,11 +139,12 @@ impl<L: Lens<Target = f32>> View for Knob<L> {
 
     fn event(&mut self, cx: &mut EventContext, event: &mut Event) {
         let move_virtual_slider = |self_ref: &mut Self, cx: &mut EventContext, new_normal: f32| {
-            self_ref.continuous_normal = new_normal.clamp(0.0, 1.0);
+            self_ref.continuous_normal = new_normal;
 
             if let Some(callback) = &self_ref.on_changing {
-                (callback)(cx, self_ref.continuous_normal);
+                (callback)(cx, self_ref.continuous_normal.clamp(0.0, 1.0));
             }
+            cx.emit(KnobEvent::DragMove(self_ref.continuous_normal.clamp(0.0, 1.0)));
         };
 
         event.map(|window_event, _| match window_event {
@@ -149,6 +156,7 @@ impl<L: Lens<Target = f32>> View for Knob<L> {
                 cx.focus_with_visibility(false);
 
                 self.continuous_normal = self.lens.get(cx);
+                cx.emit(KnobEvent::DragStart);
             }
 
             WindowEvent::MouseUp(button) if *button == MouseButton::Left => {
@@ -157,6 +165,7 @@ impl<L: Lens<Target = f32>> View for Knob<L> {
                 self.continuous_normal = self.lens.get(cx);
 
                 cx.release();
+                cx.emit(KnobEvent::DragEnd);
             }
 
             WindowEvent::MouseMove(_, y) => {
