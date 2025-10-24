@@ -130,6 +130,19 @@ impl<L: Lens<Target = f32>> Handle<'_, Knob<L>> {
 
         self
     }
+
+    /// Sets the drag scalar for the knob. Lower values make the knob less sensitive.
+    /// Use this for larger knobs to maintain consistent arc-length speed:
+    /// `drag_scalar = 0.0042 * (30.0 / radius)`.
+    pub fn drag_scalar(self, scalar: f32) -> Self {
+        if let Some(view) = self.cx.views.get_mut(&self.entity) {
+            if let Some(knob) = view.downcast_mut::<Knob<L>>() {
+                knob.drag_scalar = scalar;
+            }
+        }
+
+        self
+    }
 }
 
 impl<L: Lens<Target = f32>> View for Knob<L> {
