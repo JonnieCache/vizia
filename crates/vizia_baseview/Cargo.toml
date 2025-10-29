@@ -12,7 +12,7 @@ vizia_core.workspace = true
 vizia_input.workspace = true
 vizia_id.workspace = true
 
-baseview = { git = "https://github.com/vizia/baseview.git", rev = "bd7774294ebd6a4ea497e9c02655a4abd0408137", features = ["opengl"] }
+baseview = { path = "/home/jonnie/projects/baseview", features = ["opengl"] }
 raw-window-handle = "0.5"
 gl-rs = { package = "gl", version = "0.14" }
 skia-safe = { version = "0.84", features = ["gl", "textlayout", "svg"] }
