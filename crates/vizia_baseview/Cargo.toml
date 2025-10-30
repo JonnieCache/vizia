@@ -1,6 +1,9 @@
 [package]
 name = "vizia_baseview"
-authors = ["George Atkinson <geomyles@yahoo.co.uk>", "Billy Messenger <BillyDM@protonmail.com>"]
+authors = [
+  "George Atkinson <geomyles@yahoo.co.uk>",
+  "Billy Messenger <BillyDM@protonmail.com>",
+]
 description = "Baseview backend for vizia"
 version.workspace = true
 edition.workspace = true
@@ -12,7 +15,9 @@ vizia_core.workspace = true
 vizia_input.workspace = true
 vizia_id.workspace = true
 
-baseview = { path = "/home/jonnie/projects/baseview", features = ["opengl"] }
+baseview = { git = "https://github.com/RustAudio/baseview.git", rev = "f69e7b7", features = [
+  "opengl",
+] }
 raw-window-handle = "0.5"
 gl-rs = { package = "gl", version = "0.14" }
 skia-safe = { version = "0.84", features = ["gl", "textlayout", "svg"] }
