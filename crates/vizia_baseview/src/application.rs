@@ -251,14 +251,19 @@ impl ApplicationRunner {
         if !self.is_initialized {
             // Resizing the window doesn't apply unless the size has actually changed.
             // So we resize the window slightly larger and then back again to force a resize event.
+            // IMPORTANT: Must account for user_scale_factor when resizing, otherwise reopening
+            // a plugin with a saved scale factor will reset it to 1.0
+            let target_width = self.window_description.inner_size.width as f64 * self.current_user_scale_factor;
+            let target_height = self.window_description.inner_size.height as f64 * self.current_user_scale_factor;
+
             window.resize(baseview::Size {
-                width: self.window_description.inner_size.width as f64 + 1.0,
-                height: self.window_description.inner_size.height as f64 + 1.0,
+                width: target_width + 1.0,
+                height: target_height + 1.0,
             });
 
             window.resize(baseview::Size {
-                width: self.window_description.inner_size.width as f64,
-                height: self.window_description.inner_size.height as f64,
+                width: target_width,
+                height: target_height,
             });
             self.is_initialized = true;
         }
