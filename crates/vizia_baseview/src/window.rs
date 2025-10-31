@@ -212,6 +212,19 @@ impl WindowHandler for ViziaWindow {
     fn on_event(&mut self, window: &mut Window<'_>, event: Event) -> EventStatus {
         let mut should_quit = false;
 
+        // Check if this is a WillClose event so we can clean up Skia resources properly
+        // This is needed because Skia's DirectContext holds GL resources that must be
+        // released while the GL context is still current.
+        if matches!(event, Event::Window(baseview::WindowEvent::WillClose)) {
+            let context = window.gl_context().expect("Window was created without OpenGL support");
+            unsafe { context.make_current() };
+
+            // Abandon the Skia context to release GL resources
+            self.application.gr_context.abandoned();
+
+            unsafe { context.make_not_current() };
+        }
+
         self.application.handle_event(event, &mut should_quit);
 
         self.application.handle_idle(&self.on_idle);
