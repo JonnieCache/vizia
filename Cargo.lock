@@ -454,7 +454,7 @@ checksum = "72b3254f16251a8381aa12e40e3c4d2f0199f8c6508fbecb9d91f575e0fbb8c6"
 [[package]]
 name = "baseview"
 version = "0.1.0"
-source = "git+https://github.com/vizia/baseview.git?rev=bd7774294ebd6a4ea497e9c02655a4abd0408137#bd7774294ebd6a4ea497e9c02655a4abd0408137"
+source = "git+ssh://jcd.pub/~/git/baseview?branch=unmode#740e24238223052697f23db4be894f595ff78d51"
 dependencies = [
  "cocoa",
  "core-foundation",
