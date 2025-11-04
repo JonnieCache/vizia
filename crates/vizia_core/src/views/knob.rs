@@ -173,12 +173,14 @@ impl<L: Lens<Target = f32>> View for Knob<L> {
             }
 
             WindowEvent::MouseUp(button) if *button == MouseButton::Left => {
-                self.is_dragging = false;
+                if self.is_dragging {
+                    self.is_dragging = false;
 
-                self.continuous_normal = self.lens.get(cx);
+                    self.continuous_normal = self.lens.get(cx);
 
-                cx.release();
-                cx.emit(KnobEvent::DragEnd);
+                    cx.release();
+                    cx.emit(KnobEvent::DragEnd);
+                }
             }
 
             WindowEvent::MouseMove(_, y) => {
@@ -205,12 +207,6 @@ impl<L: Lens<Target = f32>> View for Knob<L> {
 
                     move_virtual_slider(self, cx, new_normal);
                 }
-            }
-
-            WindowEvent::MouseDoubleClick(button) if *button == MouseButton::Left => {
-                self.is_dragging = false;
-
-                move_virtual_slider(self, cx, self.default_normal);
             }
 
             WindowEvent::KeyDown(Code::ArrowUp | Code::ArrowRight, _) => {
